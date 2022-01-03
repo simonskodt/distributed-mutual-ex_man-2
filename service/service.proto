@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = "./service";
+
+package service;
+
+message Empty {
+
+}
+
+message RequestCriticalSection {
+    int32 node_id = 1;
+}
+
+message ResponseCriticalSection {
+    enum State {
+        RELEASED = 0;
+        WANTED = 1;
+        HELD = 2;
+    } 
+}
+
+message RequestExit {
+    int32 node_id = 1;
+}
+
+message RequestReplyAll {
+    int32 node_id = 1;
+}
+
+service Service {
+    rpc CriticalSection(RequestCriticalSection) returns (ResponseCriticalSection);
+    rpc Exit(RequestExit) returns (Empty);
+}
+
+service ReplyToAllService {
+    rpc ReplyToQueue(RequestReplyAll) returns (Empty);
+}
